@@ -1,0 +1,39 @@
+#content{
+    min-height: 400px;
+}
+
+
+
+.input-group{
+    margin-top: 100px;
+    
+    .form-control, .form-control:focus{
+        height: 80px;
+        border: none;
+        border-radius: 0px;
+        border-bottom: 4px solid #000;
+        font-size: 28px;
+        box-shadow: none;
+
+    }
+
+    .input-group-btn{
+        button, button:hover{
+            height: 80px;
+            width: 100px;
+            background: #fff;
+            color: #333;
+            border:none;
+            border-radius: 0px;
+            border-bottom: 4px solid #000;
+            font-size: 24px;
+            font-weight: 100;
+
+        }
+
+    }
+
+}
+
+
+
