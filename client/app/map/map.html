@@ -5,7 +5,9 @@
       <ul>
         <h2>{{sitemap.name}}</h2>
         <li ng-repeat='page in sitemap.pages'>
-          <p>{{page.url}}</p>
+          <p>{{page.url}} </p>
+          <p>{{page.contentType}}</p>
+          <p>{{page.status}}</p>
         </li>        
       </ul>
     </div>

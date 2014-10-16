@@ -2,13 +2,14 @@
 
 var _ = require('lodash');
 var Sitemap = require('./sitemap.model');
-var crawl = require('crawl')
+var crawl = require('crawl');
+var urlObj = require('url');
 
 // Get list of sitemaps
 exports.index = function(req, res) {
   Sitemap.find(function (err, sitemaps) {
     if(err) {  handleError(res, err); }
-    res.json(200, sitemaps);
+    res.json(sitemaps);
   });
 };
 
@@ -18,21 +19,64 @@ exports.show = function(req, res) {
   Sitemap.findById(req.params.id, function (err, sitemap) {
     if(err) {  handleError(res, err); }
     if(!sitemap) {  res.send(404); }
-    console.log(sitemap);
-    res.json(200, sitemap);
+//    console.log(sitemap);
+    res.json(sitemap);
   });
 };
 
 // Creates a new sitemap in the DB.
 exports.create = function(req, res) {
   var base_url = "http://" + req.body.base_url;
-  console.log(base_url)
+  console.log('base url: ' + base_url)
   crawl.crawl(base_url, function(err, pages) {
     if (err) {
         console.error("An error occured", err);
     }
-    console.log(pages)
-    //res.json(201, pages)
+
+    var nested_pages = {};
+
+    function save(parts) {
+      if (parts.length === 1) {
+        // save to array
+        console.log(parts);
+      } else {
+        parts.shift();
+        save(parts);
+      }
+    }
+
+    function createSitemap(path) {
+      var parts = path.split('/'),
+          rest = path.replace(parts[0] + '/', '');
+          
+      parts.shift();
+      console.log(parts)
+      // save
+      //save(parts);
+/*
+      if (isDefined(sitemap.urls[parts[0]])) {
+        sitemap.urls[parts[0]].push(rest);
+      } else {
+        sitemap.urls[parts[0]] = [];
+      }
+      rest && createSitemap(rest);
+      */
+    }
+
+
+    for (var num in pages){
+      var page = pages[num],
+          path;
+      if (page.contentType !== 'text/html; charset=utf-8' || page.status !== 200) {
+        continue;
+      }
+
+      path = urlObj.parse(page.url).path;
+      //console.log(path);
+      createSitemap(path);
+    }
+
+
     
     Sitemap.create({
       name: "New sitemap",
@@ -41,7 +85,7 @@ exports.create = function(req, res) {
     }, function(err, sitemap) {
       if(err) {  handleError(res, err); }
       console.log("ready to client")
-      res.json(201, sitemap)
+      res.json(sitemap)
 
     });
 
@@ -59,7 +103,7 @@ exports.update = function(req, res) {
     var updated = _.merge(sitemap, req.body);
     updated.save(function (err) {
       if (err) {  handleError(res, err); }
-       res.json(200, sitemap);
+       res.json(sitemap);
     });
   });
 };
