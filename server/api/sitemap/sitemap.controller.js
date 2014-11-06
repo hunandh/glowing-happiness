@@ -29,85 +29,63 @@ exports.create = function(req, res) {
   var base_url = "http://" + req.body.base_url;
   console.log('base url: ' + base_url)
 
-  var resultArray = [];
-  var baseArray = [];
+  var sitemap = [];
 
   crawl.crawl(base_url, function(err, pages) {
+    var page,
+        path,
+        parts,
+        part,
+        level;
+
     if (err) {
         console.error("An error occured", err);
     }
 
-    
-    var node = function(parentName, name, children){
-        this.parentName = parentName;
-        this.name = name;
-        this.children = children;
-    };
-
     for (var i1 = 0, l1 = pages.length; i1 < l1; i1++) {
 
-      var page = pages[i1],
-          path;
+      page = pages[i1];
 
       if (page.status !== 200 || page.contentType === "text/css" || page.contentType === "text/javascript" || page.contentType === "text/plain" || page.contentType === "text/plain; charset=UTF-8") {
         continue;
       }
       
       path = urlObj.parse(page.url).path;
-      var parts = path.split('/');
-      parts.shift();
+      parts = path.split('/');
+      level = 0;
 
-      for (var i2 = 0, l2 = parts.length; i2 < l2; i2++) {
+      console.log('processing url', path);
 
-        var part = new node(parts[i2 - 1], parts[i2], []);  
-        baseArray.push(part);   
-                        
-      }
-
-    }
-
-    console.log(baseArray) 
-    
-    var findByName = function(array, name){
-      var array = array,
-          name = name;
-
-      for (var num in array) {
-        if (array[num].name === name) {
-          return array[num];
+      while (parts.length) {
+        part = parts.shift();
+        if (part && part.length) {
+          console.log('processing part', part);
+          if (!sitemap[level]) {
+            console.log('creating new leve', level);
+            sitemap[level] = [part];
+          } else {
+            console.log('pushing into level', level);
+            if (sitemap[level].indexOf(part) < 0) {
+              sitemap[level].push(part);
+            }
+          }
         }
-      }   
-
-    }
-
-    for (var i3 = 0, l3 = baseArray.length; i3 < l3; i3++) {
-      var item = baseArray[i3];
-      var parent = findByName(baseArray, item.parentName);
-
-      if (parent) {
-        parent.children.push(item);
-      } else {
-        resultArray.push(item);
+        level++;
       }
-
     }
 
-    // console.log(resultArray);
-
+    console.log(sitemap);
 
     Sitemap.create({
       name: "New sitemap",
       base_url: base_url,
-      pages: resultArray
+      pages: sitemap
     }, function(err, sitemap) {
       if(err) {  handleError(res, err); }
-      res.json(sitemap)
-
+      res.json(sitemap);
     });
-
   });
 
-  
 };
 
 // Updates an existing sitemap in the DB.
