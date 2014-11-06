@@ -21,7 +21,9 @@ angular.module('simpApp')
 
     $scope.create_sitemap = function(){
       console.log($scope.baseUrl);
-      $http.post('/api/sitemaps', {base_url: $scope.baseUrl}).success(function(sitemap){
+      $http.post('/api/sitemaps', {
+        base_url: $scope.baseUrl
+      }).success(function(sitemap){
         //$scope.sitemap = sitemap;
         console.log(sitemap._id)
         $location.path(sitemap._id)

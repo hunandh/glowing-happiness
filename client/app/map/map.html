@@ -1,24 +1,24 @@
+<script type="text/ng-template" id="node-tmpl">
+  <p>{{node.name}}</p>
+  <ul>
+    <li ng-repeat="node in node.children" ng-include="'node-tmpl'"></li>
+  </ul>
+</script>
 
 <div class="container" id="content">
   <div class="row">
     <div class="col-lg-12">
+      <h2>{{sitemap.name}}</h2>
       <ul>
-        <h2>{{sitemap.name}}</h2>
-        <li ng-repeat='page in sitemap.pages'>
-          <p>{{page.name}} </p>
+        <li>
+          <p>{{sitemap.root.name}}</p>
           <ul>
-            <li ng-repeat='l2 in page.children'>
-              <p>{{l2.name}} </p>
-              <ul>
-                <li ng-repeat='l3 in l2.children'>
-                  <p>{{l3.name}} </p>
-                  
-                </li>        
-              </ul>
-            </li>        
+            <li ng-repeat="node in sitemap.root.children" ng-include="'node-tmpl'"></li>
           </ul>
-        </li>        
+        </li>
       </ul>
+      <h2>DB representation</h2>
+      <code>{{sitemap.root}}</code>
     </div>
   </div>
 </div>

@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var SitemapSchema = new Schema({
   name: String,
   base_url: String,
-  pages: Array,
+  root: Object, // represents the whole graph
   date: {type: Date, default: Date.now}
 });
 
