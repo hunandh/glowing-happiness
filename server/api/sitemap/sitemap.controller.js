@@ -27,13 +27,12 @@ exports.show = function(req, res) {
 
 // Creates a new sitemap in the DB.
 exports.create = function(req, res) {
+  // TODO: validate base url on the client
   var base_url = "http://" + req.body.base_url,
       // array representation of the sitemap, for faster searching
       sitemap = [],
       // root node of the graph represenation of the sitemap
       root;
-  
-//  console.log('base url: ' + base_url);
   
   function Node(name) {
     this.name = name;
@@ -50,25 +49,27 @@ exports.create = function(req, res) {
     }
     return false;
   }
-
-//  crawl.crawl(base_url, function(err, pages) {
   
-  var pages = [
-    base_url + '/',
-    base_url + '/about',
-    base_url + '/sign-up',
-    base_url + '/sign-in',
-    base_url + '/sign-in/',
-    base_url + '/blog/',
-    base_url + '/blog/post-1/',
-    base_url + '/blog/post-2/',
-    base_url + '/blog/post-3/',
-    base_url + '/blog/post-3#should-be-ignored',
-    base_url + '/blog/post-1/comment-1',
-    base_url + '/blog/post-1/comment-2',
-    base_url + '/blog/post-1/comment-3',
-    base_url + '/blog/post-1/comment-3/',
-  ];
+  console.log('crawling', base_url);
+
+  crawl.crawl(base_url, function(err, pages) {
+//  var pages = [
+//    base_url + '/',
+//    base_url + '/about',
+//    base_url + '/sign-up',
+//    base_url + '/sign-in',
+//    base_url + '/sign-in/',
+//    base_url + '/blog/',
+//    base_url + '/blog/post-1/',
+//    base_url + '/blog/post-2/',
+//    base_url + '/blog/post-3/',
+//    base_url + '/blog/post-3#should-be-ignored',
+//    base_url + '/blog/post-1/comment-1',
+//    base_url + '/blog/post-1/comment-2',
+//    base_url + '/blog/post-1/comment-3',
+//    base_url + '/blog/post-1/comment-3/',
+//  ];
+    
     var page,
         path,
         parts,
@@ -78,10 +79,10 @@ exports.create = function(req, res) {
         parent,
         nodeInArray;
 
-//    if (err) {
-//      console.error("An error occured", err);
-//      return;
-//    }
+    if (err) {
+      console.error("An error occured", err);
+      return;
+    }
     
     // create root node from the base url
     root = new Node(base_url);
@@ -92,14 +93,14 @@ exports.create = function(req, res) {
 
       page = pages[i];
 
-//      if (page.status !== 200 || page.contentType === "text/css" || page.contentType === "text/javascript" || page.contentType === "text/plain" || page.contentType === "text/plain; charset=UTF-8") {
-//        continue;
-//      }
+      if (page.status !== 200 || page.contentType === "text/css" || page.contentType === "text/javascript" || page.contentType === "text/plain" || page.contentType === "text/plain; charset=UTF-8") {
+        continue;
+      }
       
-//      path = urlObj.parse(page.url).path;
-      path = urlObj.parse(page).path;
+      path = urlObj.parse(page.url).path;
+      // path = urlObj.parse(page).path;
       parts = path.split('/');
-      // start from level 1 to parts.length (level 0 is always the root node)
+      // loop from level 1 to parts.length (level 0 is the root node)
       level = 1;
       // initialise the root note as the first parent
       parent = root;
@@ -132,22 +133,22 @@ exports.create = function(req, res) {
       }
     }
 
-    console.log('array sitemap');
-    console.log(sitemap);
+//    console.log('array sitemap');
+//    console.log(sitemap);
     console.log('graph sitemap');
-    // console.log(root); - need to use util.inspect to log all nested levels of the graph
+//     console.log(root); - need to use util.inspect to log all nested levels of the graph
     console.log(inspect(root, false, null));
-
-//    Sitemap.create({
-//      name: "New sitemap",
-//      base_url: base_url,
-//      pages: sitemap
-//    }, function(err, sitemap) {
-//      if(err) {  handleError(res, err); }
-//      res.json(sitemap);
-//    });
-  
-//  });
+    
+    Sitemap.create({
+      name: "New sitemap",
+      base_url: base_url,
+      root: root
+    }, function(err, root) {
+      if(err) {  handleError(res, err); }
+      res.json(root);
+    });
+    
+  });
 
 };
 
