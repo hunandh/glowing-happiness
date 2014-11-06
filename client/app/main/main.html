@@ -2,12 +2,9 @@
 <div class="container" id="content">
   <div class="row">
     <div class="col-lg-12">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Input website here" ng-model="baseUrl">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-click="create_sitemap()">Go!</button>
-        </span>
-      </div>
+      <form ng-submit="create_sitemap()">
+        <input class="form-control" type='text' placeholder='Input website here' ng-model="baseUrl" >
+      </form>
     </div>
   </div>
 </div>

@@ -28,63 +28,79 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   var base_url = "http://" + req.body.base_url;
   console.log('base url: ' + base_url)
+
+  var resultArray = [];
+  var baseArray = [];
+
   crawl.crawl(base_url, function(err, pages) {
     if (err) {
         console.error("An error occured", err);
     }
 
-    var nested_pages = {};
+    
+    var node = function(parentName, name, children){
+        this.parentName = parentName;
+        this.name = name;
+        this.children = children;
+    };
 
-    function save(parts) {
-      if (parts.length === 1) {
-        // save to array
-        console.log(parts);
-      } else {
-        parts.shift();
-        save(parts);
-      }
-    }
+    for (var i1 = 0, l1 = pages.length; i1 < l1; i1++) {
 
-    function createSitemap(path) {
-      var parts = path.split('/'),
-          rest = path.replace(parts[0] + '/', '');
-          
-      parts.shift();
-      console.log(parts)
-      // save
-      //save(parts);
-/*
-      if (isDefined(sitemap.urls[parts[0]])) {
-        sitemap.urls[parts[0]].push(rest);
-      } else {
-        sitemap.urls[parts[0]] = [];
-      }
-      rest && createSitemap(rest);
-      */
-    }
-
-
-    for (var num in pages){
-      var page = pages[num],
+      var page = pages[i1],
           path;
-      if (page.contentType !== 'text/html; charset=utf-8' || page.status !== 200) {
+
+      if (page.status !== 200 || page.contentType === "text/css" || page.contentType === "text/javascript" || page.contentType === "text/plain" || page.contentType === "text/plain; charset=UTF-8") {
         continue;
       }
-
+      
       path = urlObj.parse(page.url).path;
-      //console.log(path);
-      createSitemap(path);
+      var parts = path.split('/');
+      parts.shift();
+
+      for (var i2 = 0, l2 = parts.length; i2 < l2; i2++) {
+
+        var part = new node(parts[i2 - 1], parts[i2], []);  
+        baseArray.push(part);   
+                        
+      }
+
     }
 
-
+    console.log(baseArray) 
     
+    var findByName = function(array, name){
+      var array = array,
+          name = name;
+
+      for (var num in array) {
+        if (array[num].name === name) {
+          return array[num];
+        }
+      }   
+
+    }
+
+    for (var i3 = 0, l3 = baseArray.length; i3 < l3; i3++) {
+      var item = baseArray[i3];
+      var parent = findByName(baseArray, item.parentName);
+
+      if (parent) {
+        parent.children.push(item);
+      } else {
+        resultArray.push(item);
+      }
+
+    }
+
+    // console.log(resultArray);
+
+
     Sitemap.create({
       name: "New sitemap",
       base_url: base_url,
-      pages: pages
+      pages: resultArray
     }, function(err, sitemap) {
       if(err) {  handleError(res, err); }
-      console.log("ready to client")
       res.json(sitemap)
 
     });

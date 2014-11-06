@@ -5,6 +5,6 @@ angular.module('simpApp')
     $http.get('/api/sitemaps/' + $routeParams.map_id).success(function(sitemap){
     	$scope.sitemap = sitemap;
 
-    	console.log($scope.sitemap);
+    	console.log($scope.sitemap.pages);
     })
   });
