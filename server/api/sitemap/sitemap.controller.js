@@ -28,70 +28,64 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   var base_url = "http://" + req.body.base_url;
   console.log('base url: ' + base_url)
+
+  var sitemap = [];
+
   crawl.crawl(base_url, function(err, pages) {
+    var page,
+        path,
+        parts,
+        part,
+        level;
+
     if (err) {
         console.error("An error occured", err);
     }
 
-    var nested_pages = {};
+    for (var i1 = 0, l1 = pages.length; i1 < l1; i1++) {
 
-    function save(parts) {
-      if (parts.length === 1) {
-        // save to array
-        console.log(parts);
-      } else {
-        parts.shift();
-        save(parts);
-      }
-    }
+      page = pages[i1];
 
-    function createSitemap(path) {
-      var parts = path.split('/'),
-          rest = path.replace(parts[0] + '/', '');
-          
-      parts.shift();
-      console.log(parts)
-      // save
-      //save(parts);
-/*
-      if (isDefined(sitemap.urls[parts[0]])) {
-        sitemap.urls[parts[0]].push(rest);
-      } else {
-        sitemap.urls[parts[0]] = [];
-      }
-      rest && createSitemap(rest);
-      */
-    }
-
-
-    for (var num in pages){
-      var page = pages[num],
-          path;
-      if (page.contentType !== 'text/html; charset=utf-8' || page.status !== 200) {
+      if (page.status !== 200 || page.contentType === "text/css" || page.contentType === "text/javascript" || page.contentType === "text/plain" || page.contentType === "text/plain; charset=UTF-8") {
         continue;
       }
-
+      
       path = urlObj.parse(page.url).path;
-      //console.log(path);
-      createSitemap(path);
+      parts = path.split('/');
+      level = 0;
+
+      console.log('processing url', path);
+
+      while (parts.length) {
+        part = parts.shift();
+        if (part && part.length) {
+          console.log('processing part', part);
+          if (!sitemap[level]) {
+            console.log('creating new leve', level);
+            sitemap[level] = [part];
+          } else {
+            console.log('pushing into level', level);
+            if (sitemap[level].indexOf(part) < 0) {
+              sitemap[level].push(part);
+            }
+          }
+        }
+        level++;
+      }
     }
 
+    console.log(sitemap);
 
-    
     Sitemap.create({
       name: "New sitemap",
       base_url: base_url,
-      pages: pages
+      pages: sitemap
     }, function(err, sitemap) {
       if(err) {  handleError(res, err); }
-      console.log("ready to client")
-      res.json(sitemap)
-
+      res.json(sitemap);
     });
-
   });
 
-  
 };
 
 // Updates an existing sitemap in the DB.
