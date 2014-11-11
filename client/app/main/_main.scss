@@ -1,0 +1,140 @@
+.navbar{
+    padding: 0 30px;
+}
+
+.navbar-default{
+    background: $cyan_700;
+    color: #fff;
+    border: none;
+    border-bottom: 1px solid $cyan_800;
+
+    .navbar-header{
+        a{
+            color: #fff;
+            &:hover, &:focus{
+                color: #fff;
+            }
+        }
+    }
+    .navbar-nav{
+        li{
+            a{
+                color: $grey_200;
+                background: transparent;
+                &:hover, &:focus{
+                    color: $grey_100;
+                    background: transparent;
+                }
+            } 
+        }
+    }
+}
+
+.search_header{
+    @extend .jumbotron;
+
+    height: 300px;
+    padding-top: 100px;
+    background: $cyan_500;
+    background-position: center;
+    margin-top: -30px;
+    margin-bottom: 70px;
+    box-shadow: 0px 3px 5px $grey_500;
+}
+
+
+form{
+    .form-control{
+        height: 80px;
+        border: none;
+        border-radius: 0px;
+        border-bottom: 4px solid $grey_300;
+        font-size: 28px;
+        width: 80%;
+        margin: 0 auto;
+        background: transparent;
+        box-shadow: none;
+        color: #fff;
+
+        &:focus{
+            border-bottom: 4px solid $orange_200;
+            box-shadow: none;
+
+        }
+
+    }
+
+    input::-webkit-input-placeholder { /* WebKit browsers */
+        color: #fff !important;
+    }
+
+}
+
+.list-group{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.list-group-item{
+    margin-bottom: 15px !important;
+    border-radius: 2px !important;
+    padding: 0;
+    border: none;
+    box-shadow: 0px 2px 2px $grey_300;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+.btn-group{
+    width: 100%;
+
+    .btn-default{
+        background: transparent;
+        padding: 20px;
+        border: none;
+        font-size: 16px;
+
+
+    }
+
+    .view_map{
+        width: 90%;
+        text-align: left;
+        font-weight: bold;
+        border-radius: 0px;
+
+
+        .page_num{
+            background: $grey_100;
+            padding: 5px 10px 6px;
+            border-radius: 30px;
+            margin-top: -3px;
+            margin-left: 20px;
+            font-size: 12px;
+            font-weight: 300;
+            color: $grey_600;
+
+            &:after{
+                content: " pages";
+            }
+        }
+
+    }
+
+
+    .del_map{
+        width: 10%;
+        color: $grey_500;
+        margin-left: 0px !important;
+        border-radius: 0px;
+
+        &:hover{
+            background: $orange_500;
+            color: #fff;
+        }
+    }
+}
+
+
+

@@ -17,6 +17,7 @@
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,700,100,400|Roboto+Condensed:400,700|Roboto:500,900,100,300,700,400' rel='stylesheet' type='text/css'>
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
@@ -28,7 +29,7 @@
 
     <!-- Add your site or application content here -->
     <div ng-include="'components/navbar/navbar.html'"></div>
-    <div ng-view=""></div>
+    <div ng-view="" id="main_area"></div>
     <div ng-include="'components/footer/footer.html'"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

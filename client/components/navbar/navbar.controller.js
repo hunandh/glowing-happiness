@@ -2,10 +2,16 @@
 
 angular.module('simpApp')
   .controller('NavbarCtrl', function ($scope, $location) {
-    $scope.menu = [{
+    $scope.menu = [
+    {
+      'title': 'Create new',
+      'link': '/'
+    },
+    {
       'title': 'login',
       'link': '/'
-    }];
+    }
+    ];
 
     $scope.isCollapsed = true;
 

@@ -1,0 +1,50 @@
+
+$orange_50: #FBE9E7;
+$orange_100: #FFCCBC;
+$orange_200: #FFAB91;
+$orange_300: #FF8A65;
+$orange_400: #FF7043;
+$orange_500: #FF5722;
+$orange_600: #F4511E;
+$orange_700: #E64A19;
+$orange_800:#D84315;
+$orange_900: #BF360C;
+
+
+$cyan_500: #00BCD4;
+$cyan_50: #E0F7FA;
+$cyan_100: #B2EBF2;
+$cyan_200: #80DEEA;
+$cyan_300: #4DD0E1;
+$cyan_400: #26C6DA;
+$cyan_500: #00BCD4;
+$cyan_600: #00ACC1;
+$cyan_700: #0097A7;
+$cyan_800: #00838F;
+$cyan_900: #006064;
+
+$grey_50: #FAFAFA;
+$grey_100: #F5F5F5;
+$grey_200: #EEEEEE;
+$grey_300: #E0E0E0;
+$grey_400: #BDBDBD;
+$grey_500: #9E9E9E;
+$grey_600: #757575;
+$grey_700: #616161;
+$grey_800: #424242;
+$grey_900: #212121;
+
+
+body, html{
+	font-family: 'Roboto', sans-serif;
+	background: $grey_100;
+}
+
+#main_area{
+	min-height: 500px;
+}
+
+h1,h2,h3,h4,h5{
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 700;
+}

@@ -1,27 +1,23 @@
 <script type="text/ng-template" id="node-tmpl">
-  <p>{{node.name}}</p>
-  <ul>
+  <a href="" ng-click="hideChildren = !hideChildren">{{node.name}}</a>
+  <ul ng-hide="hideChildren">
     <li ng-repeat="node in node.children" ng-include="'node-tmpl'"></li>
   </ul>
 </script>
 
-<div class="container" id="content">
+<div id="content">
   <div class="row">
     <div class="col-lg-12">
-      <h2>{{sitemap.name}}</h2>
-      <ul>
-        <li>
-          <p>{{sitemap.root.name}}</p>
-          <ul>
-            <li ng-repeat="node in sitemap.root.children" ng-include="'node-tmpl'"></li>
-          </ul>
-        </li>
+      <h1>{{sitemap.root.name}} sitemap</h1>
+      <hr>
+
+      <ul class="nav nav-pills node" id="{{column}}">
+        <li ng-repeat="node in sitemap.root.children" ng-include="'node-tmpl'"></li>
       </ul>
-      <h2>DB representation</h2>
-      <code>{{sitemap.root}}</code>
+
+<!--       <h2>DB representation</h2>
+      <code>{{sitemap.root}}</code> -->
     </div>
   </div>
 </div>
-
-
 

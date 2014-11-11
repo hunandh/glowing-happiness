@@ -9,7 +9,7 @@ var inspect = require('util').inspect;
 // Get list of sitemaps
 exports.index = function(req, res) {
   Sitemap.find(function (err, sitemaps) {
-    if(err) {  handleError(res, err); }
+    if(err) { handleError(res, err); }
     res.json(sitemaps);
   });
 };
@@ -173,7 +173,10 @@ exports.destroy = function(req, res) {
     if(!sitemap) {  res.send(404); }
     sitemap.remove(function(err) {
       if(err) {  handleError(res, err); }
-       res.send(204);
+      Sitemap.find(function (err, sitemaps) {
+        if(err) { handleError(res, err); }
+        res.json(sitemaps);
+      });
     });
   });
 };

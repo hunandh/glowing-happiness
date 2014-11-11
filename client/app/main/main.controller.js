@@ -4,20 +4,11 @@ angular.module('simpApp')
   .controller('MainCtrl', function ($scope, $http, $location) {
     $scope.awesomeThings = [];
     $scope.baseUrl = '';
+    $scope.sitemaps  = [];
 
-/*
-    $scope.addThing = function() {
-      if($scope.newThing === '') {
-        return;
-      }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
-    };
-
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
-    };
-*/
+    $http.get('/api/sitemaps/').success(function(sitemaps){
+      $scope.sitemaps = sitemaps; 
+    }); 
 
     $scope.create_sitemap = function(){
       console.log($scope.baseUrl);
@@ -27,6 +18,18 @@ angular.module('simpApp')
         //$scope.sitemap = sitemap;
         console.log(sitemap._id)
         $location.path(sitemap._id)
+      })
+    }
+
+    $scope.viewSitmap = function(id){
+      $location.path(id);
+    }
+
+    $scope.deleteSitemap = function(item_id){
+      $http.delete('/api/sitemaps/' + item_id
+      ).success(function(sitemaps){
+        $scope.sitemaps = sitemaps; 
+        console.log("one sitmap removed");
       })
     }
   });

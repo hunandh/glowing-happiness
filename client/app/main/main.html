@@ -1,11 +1,44 @@
+<div class="search_header">
+    <div class="container">
+		<div class="row">
+		    <div class="col-lg-12">
+			    <form ng-submit="create_sitemap()">
+			        <input class="form-control" type='text' placeholder='Input website here' ng-model="baseUrl" >
+			    </form>
+		    </div>
+		</div>
+	</div>   
+</div> 
 
-<div class="container" id="content">
-  <div class="row">
-    <div class="col-lg-12">
-      <form ng-submit="create_sitemap()">
-        <input class="form-control" type='text' placeholder='Input website here' ng-model="baseUrl" >
-      </form>
-    </div>
-  </div>
-</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="list-group">
+				<div ng-repeat="item in sitemaps">
+				  	<li class="list-group-item">
+
+		  				<div class="btn-group">
+					        <button class="btn btn-default view_map" ng-click="viewSitmap(item._id)">  {{item.root.name}} 
+								<span class="page_num">{{item.root.children.length}}</span>
+					        </button>
+					        <button class="btn btn-default del_map" ng-click="deleteSitemap(item._id)">
+					            <span class="glyphicon glyphicon-remove"></span>
+					        </button>
+				        </div> 
+
+				  	</li>
+				</div>  	
+			</ul>
+<!-- 			<h2>DB representation</h2>
+      		<code>{{sitemaps}}</code> -->	
+		</div>
+	</div>		
+</div> 
+
+
+
+
+
+
+
 
